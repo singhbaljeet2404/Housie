@@ -5,6 +5,7 @@ import "./globals.css";
 import { site } from "@/config/site";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { isSampleData } from "@/lib/listings";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
     template: `%s | ${site.agent.name}`,
   },
   description: `Search MLS® listings across Brampton, Mississauga, Toronto and the GTA with ${site.agent.name}, ${site.agent.title} at ${site.brokerage.name}.`,
+  // Keep the sample-data preview out of search engines.
+  robots: isSampleData ? { index: false, follow: false } : undefined,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

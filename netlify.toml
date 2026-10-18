@@ -1,0 +1,7 @@
+[build]
+  # Netlify sets $URL to the site's primary URL; NEXT_PUBLIC_SITE_URL in the UI overrides it.
+  command = "NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-$URL} npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
