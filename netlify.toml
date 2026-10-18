@@ -5,3 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Netlify's Next.js runtime (SSR, route handlers, server actions → Netlify Functions).
+# Declared explicitly because upload deploys don't always auto-detect it; Netlify supplies the latest version.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

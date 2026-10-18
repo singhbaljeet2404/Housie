@@ -30,6 +30,14 @@ npm run build && npm start
 
 Stack: Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, MapLibre GL 6, Zod.
 
+## Deployment
+
+Hosted on Netlify (project `housie-gta`, https://housie-gta.netlify.app). Build settings live in `netlify.toml`;
+the Next.js runtime (`@netlify/plugin-nextjs`) turns server pages, route handlers and the lead server action into
+Netlify Functions. Set secrets (`RESEND_API_KEY`, `LEAD_EMAIL_TO`, …) in Netlify → Project configuration →
+Environment variables, then redeploy — env changes only apply to new builds. While `LISTINGS_PROVIDER=sample`,
+the site sends `noindex` and a disallow-all robots.txt so the preview stays out of search results.
+
 ## Where to change things
 
 - **Your name, phone, email, bio, brokerage address** → `src/config/site.ts` (every `TODO` must be filled before launch).
