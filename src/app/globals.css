@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eef5fb;
+  --color-brand-100: #d5e6f5;
+  --color-brand-500: #2563a8;
+  --color-brand-600: #1d5190;
+  --color-brand-700: #163f72;
+  --color-brand-900: #0d2747;
+  --color-accent-500: #e8833a;
+  --color-accent-600: #d06f27;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-white text-slate-900;
+}
+
+/* MapLibre popups inherit the site font */
+.maplibregl-popup-content {
+  @apply rounded-lg p-0 shadow-lg;
+  font-family: var(--font-sans);
+}
