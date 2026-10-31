@@ -10,10 +10,10 @@ import { formatPrice, formatPriceShort } from "@/lib/format";
 import { ListingCard } from "@/components/listing-card";
 import { SearchBox } from "@/components/search-box";
 import { FilterBar, type Filters } from "./filter-bar";
+import { themeColor } from "@/lib/theme-colors";
 
 const MAP_STYLE = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? "https://tiles.openfreemap.org/styles/positron";
 const GTA: { center: [number, number]; zoom: number } = { center: [-79.62, 43.7], zoom: 9.3 };
-const BRAND = "#1d5190";
 
 interface MapResponse {
   total: number;
@@ -118,9 +118,10 @@ export function MapSearch({ cities }: { cities: CityInfo[] }) {
       };
 
       map.on("load", () => {
-        const pill = pillImage(BRAND);
+        const brand = themeColor("--brand", "#1d5190");
+        const pill = pillImage(brand);
         map!.addImage("pill", pill.data, pill.options);
-        const pillHot = pillImage("#e8833a");
+        const pillHot = pillImage(themeColor("--accent", "#e8833a"));
         map!.addImage("pill-hot", pillHot.data, pillHot.options);
 
         map!.addSource("listings", { type: "geojson", data: toGeoJSON([]), cluster: true, clusterMaxZoom: 13, clusterRadius: 48 });
@@ -131,7 +132,7 @@ export function MapSearch({ cities }: { cities: CityInfo[] }) {
           source: "listings",
           filter: ["has", "point_count"],
           paint: {
-            "circle-color": BRAND,
+            "circle-color": brand,
             "circle-opacity": 0.85,
             "circle-stroke-color": "#ffffff",
             "circle-stroke-width": 2,

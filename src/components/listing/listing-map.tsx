@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { themeColor } from "@/lib/theme-colors";
 
 const MAP_STYLE = process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? "https://tiles.openfreemap.org/styles/positron";
 
@@ -15,7 +16,7 @@ export function ListingMap({ lng, lat }: { lng: number; lat: number }) {
       maplibre.setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
       const map = new maplibre.Map({ container: ref.current, style: MAP_STYLE, center: [lng, lat], zoom: 14, cooperativeGestures: true });
       map.addControl(new maplibre.NavigationControl({ showCompass: false }), "top-right");
-      new maplibre.Marker({ color: "#1d5190" }).setLngLat([lng, lat]).addTo(map);
+      new maplibre.Marker({ color: themeColor("--brand", "#1d5190") }).setLngLat([lng, lat]).addTo(map);
       remove = () => map.remove();
     });
     return () => {

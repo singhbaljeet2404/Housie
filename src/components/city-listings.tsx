@@ -6,7 +6,7 @@ import { formatPrice } from "@/lib/format";
 import { toSearchParams } from "@/lib/search-params";
 import { ListingCard } from "./listing-card";
 import { LeadForm } from "./lead-form";
-import { site } from "@/config/site";
+import { getSettings } from "@/lib/settings";
 
 export function typeFromSlug(slug: string): PropertyType | null {
   return PROPERTY_TYPES.find((t) => PROPERTY_TYPE_SLUGS[t] === slug) ?? null;
@@ -18,6 +18,7 @@ export function typeHeading(type: PropertyType) {
 
 // Shared body of the SEO city and city × property-type landing pages.
 export async function CityListings({ citySlug, type }: { citySlug: string; type?: PropertyType }) {
+  const site = await getSettings();
   const city = await getCity(citySlug);
   if (!city) notFound();
   const [stats, results] = await Promise.all([

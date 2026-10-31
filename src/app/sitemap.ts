@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/config/site";
+import { siteUrl } from "@/config/site";
 import { getAllListingIds, getCities, getListing } from "@/lib/listings";
 import { PROPERTY_TYPES, PROPERTY_TYPE_SLUGS } from "@/lib/listings/types";
 import { listingPath } from "@/lib/format";
@@ -7,7 +7,7 @@ import { listingPath } from "@/lib/format";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const cities = await getCities();
   const listings = await Promise.all((await getAllListingIds()).map((id) => getListing(id)));
-  const url = (path: string) => `${site.url}${path}`;
+  const url = (path: string) => `${siteUrl}${path}`;
 
   return [
     { url: url("/"), priority: 1 },

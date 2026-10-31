@@ -47,3 +47,6 @@ next-env.d.ts
 
 # netlify
 .netlify
+
+# local admin data (settings, leads, uploads) when not on Netlify
+/.data/

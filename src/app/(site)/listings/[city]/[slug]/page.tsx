@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
-import { site } from "@/config/site";
+import { getSettings } from "@/lib/settings";
+import { siteUrl } from "@/config/site";
 import { getAllListingIds, getListing, searchListings, type Listing } from "@/lib/listings";
 import {
   formatAddress,
@@ -50,6 +51,7 @@ export async function generateMetadata({ params }: PageProps<"/listings/[city]/[
 }
 
 export default async function ListingPage({ params }: PageProps<"/listings/[city]/[slug]">) {
+  const site = await getSettings();
   const listing = await load(params);
   const address = formatAddress(listing);
   const fullAddress = `${address}, ${listing.address.city}, ON ${listing.address.postalCode}`;
@@ -78,7 +80,7 @@ export default async function ListingPage({ params }: PageProps<"/listings/[city
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
     name: fullAddress,
-    url: `${site.url}${listingPath(listing)}`,
+    url: `${siteUrl}${listingPath(listing)}`,
     datePosted: listing.listDate,
     offers: { "@type": "Offer", price: listing.listPrice, priceCurrency: "CAD" },
     about: {
@@ -209,11 +211,7 @@ export default async function ListingPage({ params }: PageProps<"/listings/[city
         </section>
       )}
 
-      {/* TODO(compliance): replace with the TRREB / PropTx listing-level disclaimer from your IDX agreement. */}
-      <p className="mt-10 text-xs leading-relaxed text-slate-500">
-        Information deemed reliable but not guaranteed. Listing information is provided by the listing brokerage and may
-        change without notice. Measurements and room dimensions are approximate.
-      </p>
+      <p className="mt-10 text-xs leading-relaxed text-slate-500">{site.legal.listingDisclaimer}</p>
     </div>
   );
 }

@@ -38,13 +38,22 @@ Netlify Functions. Set secrets (`RESEND_API_KEY`, `LEAD_EMAIL_TO`, …) in Netli
 Environment variables, then redeploy — env changes only apply to new builds. While `LISTINGS_PROVIDER=sample`,
 the site sends `noindex` and a disallow-all robots.txt so the preview stays out of search results.
 
+## Admin (`/admin`)
+
+Sign in at `/admin` with the password in the `ADMIN_PASSWORD` environment variable (no password set = admin disabled).
+From there you can edit your profile and headshot, brokerage details, home and contact page copy, legal pages and
+disclaimers, brand colours, search-engine text and the lead notification email, and read, export (CSV) or delete
+leads. Settings, leads and uploads are stored in Netlify Blobs (`housie-settings`, `housie-leads`, `housie-media`);
+when running outside Netlify they go to `.data/` instead. Saving refreshes the cached pages immediately.
+
+Optional: set `ADMIN_SESSION_SECRET` to sign sessions with a separate key (changing it signs everyone out).
+
 ## Where to change things
 
-- **Your name, phone, email, bio, brokerage address** → `src/config/site.ts` (every `TODO` must be filled before launch).
+- **Your name, contact details, copy, colours, disclaimers** → the admin page. Defaults live in `src/lib/settings/schema.ts`.
 - **Data source** → `src/lib/listings/index.ts`. Pages only call the cached helpers there. To go live, add a provider
   implementing `ListingProvider` (`src/lib/listings/types.ts`), e.g. a Repliers adapter, and set `LISTINGS_PROVIDER`.
 - **Photos** → `src/components/listing-photo.tsx` is a placeholder; replace it with `<Image>` pointed at the feed's photo URLs.
-- **Colours** → `@theme` tokens in `src/app/globals.css`.
 
 ## Before launch (not done yet)
 

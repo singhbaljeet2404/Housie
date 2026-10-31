@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { deliverLead, leadFromFormData } from "@/lib/leads";
+import { getSettings } from "@/lib/settings";
 
 export interface LeadFormState {
   status: "idle" | "success" | "error";
@@ -26,7 +27,8 @@ export async function submitLead(_prev: LeadFormState, formData: FormData): Prom
   }
 
   try {
-    await deliverLead(parsed.data);
+    const settings = await getSettings();
+    await deliverLead(parsed.data, { notifyEmail: settings.leads.notifyEmail });
   } catch {
     return {
       status: "error",

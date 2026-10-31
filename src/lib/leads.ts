@@ -2,7 +2,8 @@
 // (Resend) and/or to a CRM webhook; with neither configured they are logged.
 
 import { z } from "zod";
-import { site } from "@/config/site";
+import { siteUrl } from "@/config/site";
+import { storeLead } from "./lead-store";
 
 export const LEAD_TYPES = ["contact", "showing", "listing-question"] as const;
 
@@ -63,7 +64,7 @@ export function leadText(lead: Lead) {
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
     lead.phone && `Phone: ${lead.phone}`,
-    lead.listingAddress && `Listing: ${lead.listingAddress}${lead.listingId ? ` (${site.url}/l/${lead.listingId})` : ""}`,
+    lead.listingAddress && `Listing: ${lead.listingAddress}${lead.listingId ? ` (${siteUrl}/l/${lead.listingId})` : ""}`,
     lead.preferredTime && `Preferred time: ${lead.preferredTime}`,
     lead.message && `\n${lead.message}\n`,
     `Marketing consent (CASL): ${lead.marketingConsent ? "yes" : "no"}`,
@@ -73,12 +74,13 @@ export function leadText(lead: Lead) {
     .join("\n");
 }
 
-export async function deliverLead(lead: Lead) {
+// Every lead is saved for the admin inbox, then emailed and/or posted to a webhook.
+export async function deliverLead(lead: Lead, { notifyEmail }: { notifyEmail?: string } = {}) {
+  const tasks: Promise<unknown>[] = [storeLead(lead)];
   const receivedAt = new Date().toISOString();
-  const tasks: Promise<unknown>[] = [];
 
   const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.LEAD_EMAIL_TO;
+  const to = notifyEmail || process.env.LEAD_EMAIL_TO;
   if (resendKey && to) {
     tasks.push(
       fetch("https://api.resend.com/emails", {
@@ -104,11 +106,6 @@ export async function deliverLead(lead: Lead) {
         body: JSON.stringify({ ...lead, receivedAt }),
       }).then(assertOk("Lead webhook")),
     );
-  }
-
-  if (tasks.length === 0) {
-    console.info(`[lead] no delivery configured — ${receivedAt}\n${leadText(lead)}`);
-    return;
   }
 
   const results = await Promise.allSettled(tasks);

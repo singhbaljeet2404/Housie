@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/config/site";
+import { siteUrl } from "@/config/site";
 import { isSampleData } from "@/lib/listings";
 
 export default function robots(): MetadataRoute.Robots {
@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
   if (isSampleData) return { rules: { userAgent: "*", disallow: "/" } };
   return {
     rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/l/"] },
-    sitemap: `${site.url}/sitemap.xml`,
+    sitemap: `${siteUrl}/sitemap.xml`,
   };
 }

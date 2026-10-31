@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { site } from "@/config/site";
+import { getSettings } from "@/lib/settings";
 import { isSampleData } from "@/lib/listings";
 
-export function Footer() {
+export async function Footer() {
+  const site = await getSettings();
   return (
     <footer className="mt-auto border-t border-slate-200 bg-slate-50 text-sm text-slate-600">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-3">
@@ -43,19 +44,8 @@ export function Footer() {
               Development preview: all listings shown are fictional sample data, not real MLS® listings.
             </p>
           )}
-          {/* TODO(compliance): replace with the exact TRREB / PropTx IDX disclaimer wording required by your data agreement. */}
-          <p>
-            The listing data on this website is provided in part by the Toronto Regional Real Estate Board and is
-            deemed reliable but not guaranteed. It is intended for consumers&apos; personal, non-commercial use and may
-            not be used for any purpose other than to identify prospective properties consumers may be interested in
-            purchasing.
-          </p>
-          <p>
-            The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by The Canadian Real
-            Estate Association (CREA) and identify the quality of services provided by real estate professionals who
-            are members of CREA. The trademarks REALTOR®, REALTORS® and the REALTOR® logo are controlled by CREA and
-            identify real estate professionals who are members of CREA.
-          </p>
+          <p>{site.legal.idxDisclaimer}</p>
+          <p>{site.legal.trademarkNotice}</p>
           <p>
             Not intended to solicit buyers or sellers already under contract with a brokerage. © {site.brokerage.name}.
           </p>

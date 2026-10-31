@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/config/site";
+import { getSettings } from "@/lib/settings";
 
 const NAV = [
   { href: "/map", label: "Map search" },
@@ -8,7 +8,8 @@ const NAV = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Header() {
+export async function Header() {
+  const site = await getSettings();
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4">

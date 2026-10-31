@@ -1,14 +1,21 @@
 @import "tailwindcss";
 
+/* --brand and --accent are set on <html> from the admin settings (layout.tsx);
+   every shade is derived from them. */
+:root {
+  --brand: #1d5190;
+  --accent: #e8833a;
+}
+
 @theme {
-  --color-brand-50: #eef5fb;
-  --color-brand-100: #d5e6f5;
-  --color-brand-500: #2563a8;
-  --color-brand-600: #1d5190;
-  --color-brand-700: #163f72;
-  --color-brand-900: #0d2747;
-  --color-accent-500: #e8833a;
-  --color-accent-600: #d06f27;
+  --color-brand-50: color-mix(in srgb, var(--brand) 7%, white);
+  --color-brand-100: color-mix(in srgb, var(--brand) 18%, white);
+  --color-brand-500: color-mix(in srgb, var(--brand) 85%, white);
+  --color-brand-600: var(--brand);
+  --color-brand-700: color-mix(in srgb, var(--brand) 80%, black);
+  --color-brand-900: color-mix(in srgb, var(--brand) 50%, black);
+  --color-accent-500: var(--accent);
+  --color-accent-600: color-mix(in srgb, var(--accent) 88%, black);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 

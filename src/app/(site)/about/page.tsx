@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { site } from "@/config/site";
+import { getSettings } from "@/lib/settings";
+import { AgentPhoto } from "@/components/agent-photo";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `${site.agent.name}, ${site.agent.title} with ${site.brokerage.name}.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSettings();
+  return { title: "About", description: `${site.agent.name}, ${site.agent.title} with ${site.brokerage.name}.` };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const site = await getSettings();
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-bold">About {site.agent.name}</h1>
+      <AgentPhoto photo={site.agent.photo} name={site.agent.name} />
+      <h1 className="mt-6 text-3xl font-bold">About {site.agent.name}</h1>
       <p className="mt-1 text-lg text-slate-600">{site.agent.title} · {site.brokerage.name}</p>
       {site.agent.bio.map((p) => <p key={p} className="mt-5 leading-relaxed text-slate-700">{p}</p>)}
       <dl className="mt-8 grid gap-4 rounded-xl bg-slate-50 p-6 text-sm sm:grid-cols-2">

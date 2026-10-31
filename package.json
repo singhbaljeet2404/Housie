@@ -13,6 +13,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.1.7",
     "maplibre-gl": "^6.14.0",
     "next": "16.4.2",
     "react": "19.3.0",

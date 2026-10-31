@@ -1,33 +1,38 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { Inter } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
-import { site } from "@/config/site";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { siteUrl } from "@/config/site";
+import { getSettings } from "@/lib/settings";
 import { isSampleData } from "@/lib/listings";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `GTA Homes for Sale | ${site.agent.name}, ${site.brokerage.name}`,
-    template: `%s | ${site.agent.name}`,
-  },
-  description: `Search MLS® listings across Brampton, Mississauga, Toronto and the GTA with ${site.agent.name}, ${site.agent.title} at ${site.brokerage.name}.`,
-  // Keep the sample-data preview out of search engines.
-  robots: isSampleData ? { index: false, follow: false } : undefined,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { agent, brokerage, seo } = await getSettings();
+  return {
+    metadataBase: new URL(siteUrl),
+    applicationName: seo.siteName,
+    title: {
+      default: `${seo.defaultTitle} | ${agent.name}, ${brokerage.name}`,
+      template: `%s | ${agent.name}`,
+    },
+    description: seo.description,
+    // Keep the sample-data preview out of search engines.
+    robots: isSampleData ? { index: false, follow: false } : undefined,
+  };
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { theme } = await getSettings();
   return (
-    <html lang="en-CA" className={`${inter.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
-        <Header />
-        <main className="flex flex-1 flex-col">{children}</main>
-        <Footer />
-      </body>
+    <html
+      lang="en-CA"
+      className={`${inter.variable} h-full antialiased`}
+      style={{ "--brand": theme.brandColor, "--accent": theme.accentColor } as CSSProperties}
+    >
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
