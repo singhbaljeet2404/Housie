@@ -8,7 +8,9 @@ import { getStore } from "@netlify/blobs";
 export const onPreBuild = async ({ utils }) => {
   const dataDir = join(process.cwd(), ".data");
   try {
-    const settings = await getStore({ name: "housie-settings", consistency: "strong" }).get("site", { type: "json" });
+    const store = getStore({ name: "housie-settings", consistency: "strong" });
+    // get() of a missing key can hang; check with getMetadata() first (see src/lib/storage.ts).
+    const settings = (await store.getMetadata("site")) ? await store.get("site", { type: "json" }) : null;
     // Never build with stale local files (e.g. from a CLI upload of a dev checkout).
     await rm(dataDir, { recursive: true, force: true });
     if (settings) {
