@@ -3,6 +3,7 @@
 
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 
 export const SESSION_COOKIE = "housie_admin";
@@ -57,6 +58,9 @@ export async function clearSessionCookie() {
 }
 
 export async function isAdmin() {
+  // Opt out of prerendering before touching the clock (session expiry): on Netlify
+  // the shell prerender can see request cookies, and Date.now() there is an error.
+  await connection();
   return verifySessionValue((await cookies()).get(SESSION_COOKIE)?.value);
 }
 

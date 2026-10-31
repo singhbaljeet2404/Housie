@@ -1,0 +1,6 @@
+{
+  "name": "pull-admin-settings",
+  "private": true,
+  "type": "module",
+  "main": "index.js"
+}

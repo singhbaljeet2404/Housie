@@ -10,3 +10,7 @@
 # Declared explicitly because upload deploys don't always auto-detect it; Netlify supplies the latest version.
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Copies the admin-saved settings from Netlify Blobs into the build (see the plugin).
+[[plugins]]
+  package = "./netlify-plugins/pull-admin-settings"
