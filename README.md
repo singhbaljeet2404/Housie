@@ -46,6 +46,9 @@ disclaimers, brand colours, search-engine text and the lead notification email, 
 leads. Settings, leads and uploads are stored in Netlify Blobs (`housie-settings`, `housie-leads`, `housie-media`);
 when running outside Netlify they go to `.data/` instead. Saving refreshes the cached pages immediately.
 
+The Next.js build can't read Blobs, so the local build plugin `netlify-plugins/pull-admin-settings` copies the
+saved settings into `.data/` before each build; that's what keeps your edits across redeploys.
+
 Optional: set `ADMIN_SESSION_SECRET` to sign sessions with a separate key (changing it signs everyone out).
 
 ## Where to change things
